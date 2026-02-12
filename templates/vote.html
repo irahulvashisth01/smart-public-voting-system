@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.vote-header {
+    background: linear-gradient(135deg, #0d6efd, #0a3d91);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.disabled-btn {
+    pointer-events: none;
+    opacity: 0.6;
+}
+</style>
+
+
+<div class="container mt-5">
+
+    <!-- HEADER -->
+    <div class="vote-header">
+        <h2>Election Dashboard</h2>
+        <p>Secure • Transparent • One Vote Per Citizen</p>
+    </div>
+
+    <div class="row">
+
+        <!-- LEFT SIDE -->
+        <div class="col-lg-8 mb-4">
+
+            <div class="glass-card">
+
+                {% if has_voted %}
+                    <h4 class="mb-4 text-success">Your Voting History</h4>
+                {% else %}
+                    <h4 class="mb-4">Available Candidates</h4>
+                {% endif %}
+
+                <div class="row">
+
+                    {% for c in candidates %}
+                    <div class="col-md-6 mb-4">
+
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body text-center">
+
+                                <h5>{{ c[1] }}</h5>
+                                <p class="text-muted">{{ c[2] }}</p>
+
+                                {% if has_voted %}
+
+                                    {% if voted_candidate_id == c[0] %}
+                                        <button class="btn btn-success w-100 disabled-btn">
+                                            ✔ You Voted
+                                        </button>
+                                    {% else %}
+                                        <button class="btn btn-secondary w-100 disabled-btn">
+                                            Already Voted
+                                        </button>
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <form method="POST">
+                                        <button type="submit"
+                                                name="candidate"
+                                                value="{{ c[0] }}"
+                                                class="btn btn-primary w-100"
+                                                onclick="return confirm('Confirm vote for {{ c[1] }}?')">
+                                            Vote
+                                        </button>
+                                    </form>
+
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE PROFILE -->
+        <div class="col-lg-4 mb-4">
+
+            <div class="glass-card text-center">
+
+                <h4 class="mb-4">Voter Profile</h4>
+
+                <div class="mb-3">
+                    <strong>Name:</strong>
+                    <p>{{ voter[0] }}</p>
+                </div>
+
+                <div class="mb-3">
+                    <strong>Voter ID:</strong>
+                    <p>{{ voter[1] }}</p>
+                </div>
+
+                <hr>
+
+                {% if has_voted %}
+                    <div class="alert alert-success">
+                        You have successfully cast your vote.
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        You are eligible to vote.
+                    </div>
+                {% endif %}
+
+                <a href="/logout" class="btn btn-secondary w-100 mt-2">
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

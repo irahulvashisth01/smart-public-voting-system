@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+/* HERO GRADIENT */
+.hero-section {
+    background: linear-gradient(135deg, #0d6efd, #0a3d91);
+    color: white;
+    padding: 90px 20px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
+/* Glass Card Improved */
+.glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 15px;
+    padding: 25px;
+    color: #333;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+/* Stat Cards */
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Fade animation */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s ease forwards;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.gov-heading {
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* Responsive Fix */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 60px 15px;
+    }
+}
+</style>
+
+
+<div class="container mt-5">
+
+    <!-- HERO -->
+    <div class="hero-section fade-in">
+        <h1 class="gov-heading display-4 mb-3">
+            Smart Public Voting System
+        </h1>
+
+        <p class="lead mb-4">
+            Secure • Transparent • Face Recognition
+        </p>
+
+        <div>
+            <a href="/register" class="btn btn-light btn-lg me-3 shadow">
+                Register
+            </a>
+
+            <a href="/login" class="btn btn-warning btn-lg shadow">
+                Login & Vote
+            </a>
+        </div>
+    </div>
+
+
+    <!-- STATS -->
+    <div class="row text-center mt-5 fade-in" style="animation-delay:0.3s;">
+
+        <div class="col-md-4 mb-4">
+            <div class="stat-card">
+                <h2 id="votersCount">0</h2>
+                <p class="text-muted">Registered Voters</p>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="stat-card">
+                <h2 id="votesCount">0</h2>
+                <p class="text-muted">Votes Cast</p>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="stat-card">
+                <h2>100%</h2>
+                <p class="text-muted">Secure & Verified</p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- FEATURES -->
+    <div class="row mt-5 text-center">
+
+        <div class="col-md-4 mb-4 fade-in" style="animation-delay:0.5s;">
+            <div class="glass-card">
+                <h4>🔐 Secure Authentication</h4>
+                <p>
+                    Advanced face recognition ensures only verified voters participate.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4 fade-in" style="animation-delay:0.7s;">
+            <div class="glass-card">
+                <h4>🗳 Fair Election</h4>
+                <p>
+                    One voter, one vote system with strict double-vote prevention.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4 fade-in" style="animation-delay:0.9s;">
+            <div class="glass-card">
+                <h4>📊 Real-Time Results</h4>
+                <p>
+                    Live vote counting and transparent result dashboard.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Counter Animation -->
+<script>
+function animateValue(id, start, end, duration) {
+    let range = end - start;
+    let current = start;
+    let increment = end > start ? 1 : -1;
+    let stepTime = Math.abs(Math.floor(duration / range));
+    let obj = document.getElementById(id);
+
+    let timer = setInterval(function() {
+        current += increment;
+        obj.innerHTML = current;
+        if (current == end) {
+            clearInterval(timer);
+        }
+    }, stepTime);
+}
+
+animateValue("votersCount", 0, 250, 1500);
+animateValue("votesCount", 0, 180, 1500);
+</script>
+
+{% endblock %}

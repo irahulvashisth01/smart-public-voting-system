@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+/* Government Header */
+.admin-login-header {
+    background: linear-gradient(135deg, #0d6efd, #0a3d91);
+    color: white;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* Glass Card */
+.glass-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+    transition: 0.3s;
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Fade Animation */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.7s ease forwards;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+<div class="container mt-5">
+
+    <!-- Header -->
+    <div class="admin-login-header fade-in">
+        <h2>Administrator Access</h2>
+        <p>Secure Election Management Login</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="glass-card col-md-6 mx-auto fade-in" style="animation-delay:0.2s;">
+
+        <!-- Error Message -->
+        {% if message %}
+            <div class="alert alert-danger text-center">
+                {{ message }}
+            </div>
+        {% endif %}
+
+        <form method="POST">
+
+            <div class="mb-4">
+                <label class="form-label">Username</label>
+                <input type="text"
+                       name="username"
+                       class="form-control"
+                       placeholder="Enter admin username"
+                       required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <input type="password"
+                       name="password"
+                       class="form-control"
+                       placeholder="Enter password"
+                       required>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <!-- Back Button -->
+                <a href="/" class="btn btn-secondary">
+                    ← Back
+                </a>
+
+                <!-- Login Button -->
+                <button type="submit"
+                        class="btn btn-dark shadow">
+                    Login
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

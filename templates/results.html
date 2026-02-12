@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.results-header {
+    background: linear-gradient(135deg, #0d6efd, #0a3d91);
+    color: white;
+    padding: 35px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.glass-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.winner-row {
+    background-color: #d4edda !important;
+    font-weight: bold;
+}
+
+.progress {
+    height: 20px;
+}
+</style>
+
+<div class="container mt-5">
+
+    <!-- Header -->
+    <div class="results-header">
+        <h2>Election Results Dashboard</h2>
+        <p>Live Transparent Vote Counting</p>
+    </div>
+
+    <div class="glass-card">
+
+        <!-- Export Button (Admin Only) -->
+        {% if session.get('admin') %}
+        <div class="text-end mb-3">
+            <a href="/export_pdf" class="btn btn-dark btn-sm">
+                📄 Export Results to PDF
+            </a>
+        </div>
+        {% endif %}
+
+        <table class="table table-hover text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Candidate</th>
+                    <th>Total Votes</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in results %}
+                {% set percentage = (row[1] / total_votes * 100) if total_votes > 0 else 0 %}
+                <tr class="{% if row[0] == winner %}winner-row{% endif %}">
+                    <td>
+                        {{ row[0] }}
+                        {% if row[0] == winner %}
+                            🏆 Winner
+                        {% endif %}
+                    </td>
+                    <td>{{ row[1] }}</td>
+                    <td>
+                        {{ "%.2f"|format(percentage) }}%
+                        <div class="progress mt-2">
+                            <div class="progress-bar 
+                                {% if row[0] == winner %}bg-success{% else %}bg-primary{% endif %}"
+                                role="progressbar"
+                                style="width: {{ percentage }}%">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <hr>
+
+        <!-- Graph Dashboard -->
+        <h4 class="text-center mt-4">📈 Vote Distribution Chart</h4>
+        <canvas id="voteChart"></canvas>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const labels = {{ results | map(attribute=0) | list | safe }};
+    const votes = {{ results | map(attribute=1) | list | safe }};
+
+    const ctx = document.getElementById('voteChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Votes',
+                data: votes,
+                backgroundColor: 'rgba(13,110,253,0.7)',
+                borderColor: 'rgba(13,110,253,1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            animation: {
+                duration: 1500
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}
